@@ -5,13 +5,92 @@ This is the high-level package diagram that illustrates the three-layer architec
 
 ![Package Diagram (1)](High-Level_Package_Diagram.png)
 
+## Architecture Layers
 
+### 1. Presentation Layer
+**Purpose**: Handles user interface and user interaction components.
+
+**Components**:
+- User_Management: Handles user registration, authentication, and profile management interfaces.
+- Place_Management: Manages property listing, editing, and search interfaces.
+- Review_Management: Provides interfaces for creating and viewing property reviews.
+- Amenity_Management: Manages property amenity selection and configuration interfaces.
+
+### 2. Business Logic Layer
+**Purpose**: Implements core business rules, data processing, and application logic.
+
+**Components**:
+- User_Model: Implements user-related business rules and operations.
+- Place_Model: Handles property-related logic and validations.
+- Review_Model: Manages review creation and rating calculations.
+- Amenity_Model: Processes amenity-related business rules.
+
+### 3. Persistence Layer
+**Purpose**: Manages data storage and retrieval operations.
+
+**Component**:
+- Database: Handles all data persistence operations.
 
 # Class Diagram:
 
 This is the class diagram for the Business Logic layer, focusing on the User, Place, Review, and Amenity entities, including their attributes, methods, and relationships. And which also includes the relationships between Places and Amenities.
 
 ![Class Diagram (1)](Class_Diagram.png)
+
+## The Differents Classes:
+
+### User Class
+The User class serves as the central entity representing platform users (both renters and property owners).
+
+**Key Features:**
+- Comprehensive user profile management with secure handling of sensitive data (private email and password).
+- Role-based access control through the Admin boolean.
+- Encapsulated sensitive data with private getters/setters.
+
+### Place Class
+Represents rental properties available on the platform.
+
+**Key Features:**
+- Geographic location tracking (Longitude, Latitude).
+- Property categorization (TypeOfPlace).
+- Price management.
+- Full CRUD operations for property management.
+
+### Review Class
+Handles user feedback and ratings for properties.
+
+**Key Features:**
+- Numerical rating system (float Rating).
+- Text-based feedback (Comment).
+- Maintains relationships with both User and Place through IDs.
+- Audit trail with creation and update timestamps.
+
+### Amenities Class
+Manages available features and facilities for properties.
+
+**Key Features:**
+- Timestamp tracking for amenity creation and updates.
+- Extensible design for adding new amenity types.
+
+### Amenity_Place Class
+Junction table implementing many-to-many relationship between Places and Amenities.
+
+### 1. Relationship Choices
+- **User-Place**: Composition indicating strong ownership.
+  - Rationale: Places cannot exist without a creating user.
+  - Implementation: Cascade deletion when user is removed.
+
+- **User-Review**: Association relationship.
+   - Rationale: Users and Reviews can exist independently.
+   - Implementation: Reviews are not deleted if the User who submited it is deleted.
+
+- **Place-Review**: Composition relationship.
+  - Rationale: Reviews are dependent on the existence of places.
+  - Implementation: Reviews are deleted if the associated place is removed.
+
+- **Place-Amenities**: Aggregation relationship.
+  - Rationale: Amenities can exist independently of places.
+  - Implementation: Allows amenities to be reused across multiple properties.
 
 # Sequence Diagram: User create an account
 
@@ -41,10 +120,10 @@ This sequence diagram illustrates the user registration process in the HBnB plat
    - Ensures proper error handling for system failures
 
 
-
 # Sequence Diagram : User Create a new Place listing
 
-This Sequence Diagram illustrates the process of a User creating a new place listing. This process works when data is valid and storage functions correctly. Invalid data leads to user errors while system failures cause server errors.
+Users can create places on the HBnB platform.
+This sequence diagram illustrates the process to create a place by the user. The diagram shows the complete flow from the initial user data submission through validation and final creation of the place, highlighting the importance of error handling for a reliable user experience.
 
 ![Sequence Create New Place (1)](Sequence-User_Create_Place.png)
 
